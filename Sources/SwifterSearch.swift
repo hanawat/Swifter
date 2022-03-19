@@ -67,8 +67,8 @@ public extension Swifter {
         parameters["callback"] ??= callback
         parameters["tweet_mode"] ??= tweetMode.stringValue
 
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json["statuses"], json["search_metadata"])
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json["statuses"], object, json["search_metadata"])
             }, failure: failure)
     }
     

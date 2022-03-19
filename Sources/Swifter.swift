@@ -87,10 +87,10 @@ public class Swifter {
     
     // MARK: - Types
     
-    public typealias SuccessHandler = (JSON) -> Void
-    public typealias CursorSuccessHandler = (JSON, _ previousCursor: String?, _ nextCursor: String?) -> Void
-    public typealias JSONSuccessHandler = (JSON, _ response: HTTPURLResponse) -> Void
-    public typealias SearchResultHandler = (JSON, _ searchMetadata: JSON) -> Void
+    public typealias SuccessHandler = (JSON, _ rawValue: Any) -> Void
+    public typealias CursorSuccessHandler = (JSON, _ rawValue: Any, _ previousCursor: String?, _ nextCursor: String?) -> Void
+    public typealias JSONSuccessHandler = (JSON, _ rawValue: Any, _ response: HTTPURLResponse) -> Void
+    public typealias SearchResultHandler = (JSON, _ rawValue: Any, _ searchMetadata: JSON) -> Void
     public typealias FailureHandler = (_ error: Error) -> Void
     
     
@@ -169,14 +169,15 @@ public class Swifter {
         let jsonSuccessHandler: HTTPRequest.SuccessHandler = { data, response in
             DispatchQueue.global(qos: .utility).async {
                 do {
-                    let jsonResult = try JSON.parse(jsonData: data)
+                    let object = try JSON.object(from: data)
+                    let result = JSON.parse(object: object)
                     DispatchQueue.main.async {
-                        success?(jsonResult, response)
+                        success?(result, object, response)
                     }
                 } catch {
                     DispatchQueue.main.async {
                         if case 200...299 = response.statusCode, data.isEmpty {
-                            success?(JSON("{}"), response)
+                            success?(JSON("{}"), [:], response)
                         } else {
                             failure?(error)
                         }
@@ -211,12 +212,13 @@ public class Swifter {
             let jsonChunks = jsonString.components(separatedBy: chunkSeparator)
             for chunk in jsonChunks where !chunk.utf16.isEmpty {
                 if let chunkData = chunk.data(using: .utf8) {
-                    guard let jsonResult = try? JSON.parse(jsonData: chunkData) else {
+                    guard let object = try? JSON.object(from: chunkData) else {
                         self.chunkBuffer = chunk
                         return
                     }
+                    let result = JSON.parse(object: object)
                     chunkBuffer = nil
-                    handler?(jsonResult, response)
+                    handler?(result, object, response)
                 }
             }
         }

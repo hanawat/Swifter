@@ -53,8 +53,8 @@ public extension Swifter {
         params["include_entities"] ??= includeEntities
         params["tweet_mode"] ??= tweetMode.stringValue
         
-        self.getJSON(path: path, baseURL: .api, parameters: params, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: params, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     

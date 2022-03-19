@@ -44,8 +44,8 @@ public extension Swifter {
         parameters["trim_user"] ??= trimUser
         parameters["tweet_mode"] ??= tweetMode.stringValue
 
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-			success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+			success?(json, object)
 		}, failure: failure)
     }
 
@@ -86,7 +86,7 @@ public extension Swifter {
 		parameters["include_ext_alt_text"] ??= includeExtAltText
         parameters["tweet_mode"] ??= tweetMode.stringValue
 
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in success?(json) }, failure: failure)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in success?(json, object) }, failure: failure)
     }
 
     /**
@@ -105,8 +105,8 @@ public extension Swifter {
         parameters["trim_user"] ??= trimUser
         parameters["tweet_mode"] ??= tweetMode.stringValue
 
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-			success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+			success?(json, object)
 		}, failure: failure)
     }
 
@@ -171,8 +171,8 @@ public extension Swifter {
             parameters["media_ids"] = mediaIDs.joined(separator: ",")
         }
 
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
 
@@ -209,8 +209,8 @@ public extension Swifter {
             parameters["display_coordinates"] = true
         }
 
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
             }, failure: failure)
     }
 	
@@ -221,10 +221,10 @@ public extension Swifter {
 			return
 		}
 
-        self.prepareUpload(data: data, type: .gif, category: .gif, success: { json, response in
+        self.prepareUpload(data: data, type: .gif, category: .gif, success: { json, _, response in
             if let media_id = json["media_id_string"].string {
-                self.appendUpload(media_id, data: data, name: attachmentUrl.lastPathComponent, index: 0, success: { json, response in
-                    self.finalizeUpload(mediaId: media_id, success: { json, resoponse in
+                self.appendUpload(media_id, data: data, name: attachmentUrl.lastPathComponent, index: 0, success: { json, _, response in
+                    self.finalizeUpload(mediaId: media_id, success: { json, _, resoponse in
                         self.postTweet(status: text, mediaIDs: [media_id], success: success, failure: failure)
                     }, failure: failure)
                 }, failure: failure)
@@ -256,8 +256,8 @@ public extension Swifter {
         parameters["additional_owners"] ??= additionalOwners?.value
         parameters[Swifter.DataParameters.dataKey] = "media"
 
-        self.postJSON(path: path, baseURL: .upload, parameters: parameters, success: {
-			json, _ in success?(json)
+        self.postJSON(path: path, baseURL: .upload, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
 		}, failure: failure)
     }
 
@@ -267,11 +267,11 @@ public extension Swifter {
                             category: MediaCategory,
                             success: SuccessHandler? = nil,
                             failure: FailureHandler? = nil) {
-        self.prepareUpload(data: media, type: type, category: category, success: { json, response in
+        self.prepareUpload(data: media, type: type, category: category, success: { json, _, response in
             if let media_id = json["media_id_string"].string {
-                self.appendUpload(media_id, data: media, name: name, index: 0, success: { json, response in
-                    self.finalizeUpload(mediaId: media_id, success: { (json, _) in
-                        success?(json)
+                self.appendUpload(media_id, data: media, name: name, index: 0, success: { json, object, response in
+                    self.finalizeUpload(mediaId: media_id, success: { (json, object, _) in
+                        success?(json, object)
                     }, failure: failure)
                 }, failure: failure)
             }
@@ -305,7 +305,7 @@ public extension Swifter {
         parameters["trim_user"] ??= trimUser
         parameters["tweet_mode"] ??= tweetMode.stringValue
 
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in success?(json) }, failure: failure)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in success?(json, object) }, failure: failure)
     }
     
     /**
@@ -331,8 +331,8 @@ public extension Swifter {
         parameters["trim_user"] ??= trimUser
         parameters["tweet_mode"] ??= tweetMode.stringValue
         
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-			success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+			success?(json, object)
 		}, failure: failure)
     }
 
@@ -365,8 +365,8 @@ public extension Swifter {
         parameters["related"] ??= related
         parameters["lang"] ??= lang
 
-        self.postJSON(path: path, baseURL: .publish, parameters: parameters, success: { json, _ in
-			success?(json)
+        self.postJSON(path: path, baseURL: .publish, parameters: parameters, success: { json, object, _ in
+			success?(json, object)
 		}, failure: failure)
     }
 
@@ -391,8 +391,8 @@ public extension Swifter {
         parameters["cursor"] ??= cursor
         parameters["stringify_ids"] ??= stringifyIDs
 
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json["ids"], json["previous_cursor_str"].string, json["next_cursor_str"].string)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json["ids"], object, json["previous_cursor_str"].string, json["next_cursor_str"].string)
             }, failure: failure)
     }
 
@@ -419,8 +419,8 @@ public extension Swifter {
         parameters["map"] ??= map
         parameters["tweet_mode"] ??= tweetMode.stringValue
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-			success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+			success?(json, object)
 		}, failure: failure)
     }
     

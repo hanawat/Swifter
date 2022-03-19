@@ -36,8 +36,8 @@ public extension Swifter {
                   success: SuccessHandler? = nil,
                   failure: FailureHandler? = nil) {
         let path = "geo/id/\(placeID).json"
-        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -63,8 +63,8 @@ public extension Swifter {
         parameters["granularity"] ??= granularity
         parameters["max_results"] ??= maxResults
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -107,7 +107,7 @@ public extension Swifter {
         parameters["contained_within"] ??= containedWithin
         parameters["attribute:street_address"] ??= attributeStreetAddress
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in success?(json) }, failure: failure)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in success?(json, object) }, failure: failure)
     }
     
     /**
@@ -134,8 +134,8 @@ public extension Swifter {
         parameters["contained_within"] ??= containedWithin
         parameters["attribute:street_address"] ??= attributeStreetAddress
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     

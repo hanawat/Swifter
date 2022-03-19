@@ -137,13 +137,12 @@ public enum JSON : Equatable, CustomStringConvertible {
         return array[index]
     }
     
-    static func parse(jsonData: Data) throws -> JSON {
-        do {
-            let object = try JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
-            return JSON(object)
-        } catch {
-            throw SwifterError(message: "\(error)", kind: .jsonParseError)
-        }
+    static func parse(object: Any) -> JSON {
+        return JSON(object)
+    }
+
+    static func object(from data: Data) throws -> Any {
+        return try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
     }
     
     static func parse(string : String) throws -> JSON {
@@ -151,7 +150,7 @@ public enum JSON : Equatable, CustomStringConvertible {
             guard let data = string.data(using: .utf8, allowLossyConversion: false) else {
                 throw SwifterError(message: "Cannot parse invalid string", kind: .jsonParseError)
             }
-            return try parse(jsonData: data)
+            return try parse(object: object(from: data))
         } catch {
             throw SwifterError(message: "\(error)", kind: .jsonParseError)
         }

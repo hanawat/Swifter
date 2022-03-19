@@ -49,8 +49,8 @@ public extension Swifter {
         parameters["max_id"] ??= maxID
         parameters["tweet_mode"] ??= tweetMode.stringValue
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -72,8 +72,8 @@ public extension Swifter {
         parameters["max_id"] ??= maxID
         parameters["tweet_mode"] ??= tweetMode.stringValue
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -96,8 +96,8 @@ public extension Swifter {
         parameters["include_entities"] ??= includeEntities
         parameters["tweet_mode"] ??= tweetMode.stringValue
         
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -120,8 +120,8 @@ public extension Swifter {
         parameters["include_entities"] ??= includeEntities
         parameters["tweet_mode"] ??= tweetMode.stringValue
         
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     

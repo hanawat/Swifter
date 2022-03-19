@@ -43,8 +43,8 @@ public extension Swifter {
         var parameters = [String: Any]()
         parameters["lang"] ??= lang
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -61,8 +61,8 @@ public extension Swifter {
         var parameters = [String: Any]()
         parameters["lang"] ??= lang
         
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -75,8 +75,8 @@ public extension Swifter {
                              success: SuccessHandler? = nil,
                              failure: FailureHandler? = nil) {
         let path = "users/suggestions/\(slug)/members.json"
-        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     

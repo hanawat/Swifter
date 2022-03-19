@@ -56,10 +56,10 @@ public extension Swifter {
                                            Swifter.DataParameters.dataKey: "media",
                                            Swifter.DataParameters.fileNameKey: name ?? "Swifter.media",
                                            "media": subData]
-        self.jsonRequest(path: path, baseURL: .upload, method: .POST, parameters: parameters, success: { (json, response) in
+        self.jsonRequest(path: path, baseURL: .upload, method: .POST, parameters: parameters, success: { (json, object, response) in
             let next = index + 1
             if data.count < next * chunkSize {
-                success?(json, response)
+                success?(json, object, response)
             } else {
                 self.appendUpload(mediaId, data: data, name: name, index: next, success: success, failure: failure)
             }
@@ -70,7 +70,7 @@ public extension Swifter {
         let path = "media/upload.json"
         let parameters = ["command": "FINALIZE",
                           "media_id": mediaId]
-        self.postJSON(path: path, baseURL: .upload, parameters: parameters, success: { (json, response) in
+        self.postJSON(path: path, baseURL: .upload, parameters: parameters, success: { (json, object, response) in
             guard let obj = json.object, obj.keys.count > 0 else {
                 let error = SwifterError(message: "Bad Response for Multipart Media Upload",
                                          kind: .invalidMultipartMediaResponse)
@@ -79,11 +79,11 @@ public extension Swifter {
             }
             if let processingInfo = json["processing_info"].object {
                 // async FINALIZE response which requires further STATUS command call(s)
-                self.statusCheck(processingInfo: processingInfo, json: json, response: response,
+                self.statusCheck(processingInfo: processingInfo, json: json, object: object, response: response,
                                  mediaId: mediaId, success: success, failure: failure)
             } else {
                 // sync FINALIZE response
-                success?(json, response)
+                success?(json, object, response)
             }
         }, failure: failure)
     }
@@ -92,9 +92,9 @@ public extension Swifter {
         let path = "media/upload.json"
         let parameters = ["command": "STATUS",
                           "media_id": mediaId]
-        self.getJSON(path: path, baseURL: .upload, parameters: parameters, success: { (json, response) in
+        self.getJSON(path: path, baseURL: .upload, parameters: parameters, success: { (json, object, response) in
             if let processingInfo = json["processing_info"].object {
-                self.statusCheck(processingInfo: processingInfo, json: json, response: response,
+                self.statusCheck(processingInfo: processingInfo, json: json, object: object, response: response,
                                  mediaId: mediaId, success: success, failure: failure)
             } else {
                 let error = SwifterError(message: "Bad Response for Multipart Media Upload",
@@ -106,6 +106,7 @@ public extension Swifter {
 
     private func statusCheck(processingInfo: [String: JSON],
                              json: JSON,
+                             object: Any,
                              response: HTTPURLResponse,
                              mediaId: String,
                              success: JSONSuccessHandler? = nil,
@@ -117,7 +118,7 @@ public extension Swifter {
                 self.statusUpload(mediaId: mediaId, success: success, failure: failure)
             }
         case "succeeded":
-            success?(json, response)
+            success?(json, object, response)
         default: // includes failed
             let error = SwifterError(message: "Failed to upload Multipart Media",
                                      kind: .invalidMultipartMediaResponse)

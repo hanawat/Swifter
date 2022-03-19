@@ -192,7 +192,7 @@ public extension Swifter {
     }
     
     func authorizeAppOnly(success: TokenSuccessHandler?, failure: FailureHandler?) {
-        self.postOAuth2BearerToken(success: { json, response in
+        self.postOAuth2BearerToken(success: { json, _, response in
             if let tokenType = json["token_type"].string {
                 if tokenType == "bearer" {
                     let accessToken = json["access_token"].string
@@ -228,7 +228,7 @@ public extension Swifter {
     func invalidateOAuth2BearerToken(success: TokenSuccessHandler?, failure: FailureHandler?) {
         let path = "oauth2/invalidate_token"
         
-        self.jsonRequest(path: path, baseURL: .oauth, method: .POST, parameters: [:], success: { json, response in
+        self.jsonRequest(path: path, baseURL: .oauth, method: .POST, parameters: [:], success: { json, _, response in
             if let accessToken = json["access_token"].string {
                 self.client.credential = nil
                 let credentialToken = Credential.OAuthAccessToken(key: accessToken, secret: "")

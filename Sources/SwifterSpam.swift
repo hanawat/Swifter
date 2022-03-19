@@ -37,8 +37,8 @@ public extension Swifter {
                     failure: FailureHandler? = nil) {
         let path = "users/report_spam.json"
         let parameters: [String: Any] = [userTag.key: userTag.value]
-        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.postJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     

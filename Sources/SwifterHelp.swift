@@ -37,8 +37,8 @@ public extension Swifter {
     func getHelpConfiguration(success: SuccessHandler? = nil,
                               failure: FailureHandler? = nil) {
         let path = "help/configuration.json"
-        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
@@ -50,8 +50,8 @@ public extension Swifter {
     func getHelpLanguages(success: SuccessHandler? = nil,
                           failure: FailureHandler? = nil) {
         let path = "help/languages.json"
-        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, object, _ in
+            success?(json, object)
         },failure: failure)
     }
     
@@ -63,8 +63,8 @@ public extension Swifter {
     func getHelpPrivacy(success: SuccessHandler? = nil,
                         failure: FailureHandler? = nil) {
         let path = "help/privacy.json"
-        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, _ in
-            success?(json["privacy"])
+        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, object, _ in
+            success?(json["privacy"], object)
         }, failure: failure)
     }
     
@@ -76,8 +76,8 @@ public extension Swifter {
     func getHelpTermsOfService(success: SuccessHandler? = nil,
                                failure: FailureHandler? = nil) {
         let path = "help/tos.json"
-        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, _ in
-            success?(json["tos"])
+        self.getJSON(path: path, baseURL: .api, parameters: [:], success: { json, object, _ in
+            success?(json["tos"], object)
         }, failure: failure)
     }
     
@@ -102,8 +102,8 @@ public extension Swifter {
         let path = "application/rate_limit_status.json"
         var parameters = [String: Any]()
         parameters["resources"] ??= resources?.joined(separator: ",")
-        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, _ in
-            success?(json)
+        self.getJSON(path: path, baseURL: .api, parameters: parameters, success: { json, object, _ in
+            success?(json, object)
         }, failure: failure)
     }
     
